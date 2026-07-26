@@ -1,75 +1,63 @@
-# Plumbline — portfolio (PWA)
+# Plumbline — studio site (PWA)
 
-A single-page, installable portfolio for Plumbline. Static files only — no build step.
+The public site for **Plumbline Studio** — the parent brand behind Toolwright and
+the studio's other doors. A single-page, installable PWA served by GitHub Pages,
+live at **https://plumbline.toolwright.dev**.
 
-## Files (keep this structure)
+Static files only — hand-written HTML/CSS/vanilla JS, no framework, no build
+step, no dependencies. The animated background is a self-contained particle-life
+engine ported from the Toolwright app.
+
+## Status
+
+**Live** at https://plumbline.toolwright.dev (GitHub Pages, `main` branch,
+`/ (root)`, custom domain via the `CNAME` file). This repo is public — treat
+every commit as brand-visible.
+
+## What's actually here
 
 ```
 .
-├── index.html
-├── manifest.webmanifest
-├── sw.js
-├── .nojekyll
-└── icons/
-    ├── icon-192.png
-    ├── icon-512.png
-    ├── icon-192-maskable.png
-    ├── icon-512-maskable.png
-    ├── apple-touch-icon.png
-    └── favicon.png
+├── index.html            # the whole site: content, styles, particle field, SW registration
+├── card/                 # digital business card at /card/ (own page + OG image + QR regen script)
+├── shots/                # screenshots used by the "Selected projects" grid
+├── icons/                # PWA icons, maskable variants, favicon, apple-touch-icon
+├── manifest.webmanifest  # installability metadata
+├── sw.js                 # cache-first service worker (cache name: plumbline-v4)
+├── CNAME                 # plumbline.toolwright.dev
+├── .nojekyll             # keep GitHub Pages from running Jekyll
+├── plumbline.json        # platform manifest — surfaces + stage
+└── ops/                  # Plumbline gate runner + parked workflow (see ops/gate.workflow.yml)
 ```
 
-All paths in the site are relative, so it works at a project URL
-(`https://<user>.github.io/<repo>/`) without any edits.
+All paths are relative, so the site also works at a project URL without edits.
 
-## Deploy to GitHub Pages
+## Run locally
 
-1. Create a new **public** repository (e.g. `plumbline`).
-   *Pages is free on public repos; Pages from a private repo needs a paid GitHub plan.
-   The published page is public either way, and there are no secrets in these files.*
-2. Add all files above, keeping the folder structure (web upload or `git push`).
-3. **Settings → Pages → Build and deployment → Source: "Deploy from a branch"**,
-   branch `main`, folder `/ (root)`, then **Save**.
-4. After ~1 minute the site is live at `https://<user>.github.io/<repo>/` over HTTPS.
-5. Open it on a phone — "Add to Home Screen" installs it as an app.
+No toolchain needed:
 
-`.nojekyll` is included so GitHub doesn't run Jekyll over the files.
-
-## Updating later
-
-The service worker caches the site for offline use. When you change any file,
-bump the cache name in `sw.js` (`const CACHE = 'plumbline-v1'` → `'plumbline-v2'`)
-so returning visitors get the new version instead of the cached one.
-
-## Custom domain — plumbline.studio (when you're ready)
-
-Launch on the `github.io` URL first; add the domain once it's registered and you can set DNS.
-
-1. **GitHub:** Settings → Pages → Custom domain → enter `plumbline.studio` → Save.
-   (This creates a `CNAME` file in the repo for you — no need to add it by hand.)
-2. **DNS provider:** create the records below.
-3. Allow up to 24 h for DNS to propagate, then tick **Enforce HTTPS**.
-
-**Apex `plumbline.studio` — A records (IPv4):**
+```bash
+python3 -m http.server 8000   # then open http://localhost:8000
 ```
-185.199.108.153
-185.199.109.153
-185.199.110.153
-185.199.111.153
-```
-**Optional — AAAA records (IPv6):**
-```
-2606:50c0:8000::153
-2606:50c0:8001::153
-2606:50c0:8002::153
-2606:50c0:8003::153
-```
-**`www` subdomain — CNAME:** `www` → `<user>.github.io`
 
-> Don't add the custom domain in GitHub before the DNS records exist — until DNS
-> resolves, the `github.io` URL will redirect to a domain that isn't live yet.
-> Records verified against GitHub Pages documentation, May 2026.
+(Use a local server rather than `file://` — the service worker needs HTTP.)
+
+## Updating the site
+
+The service worker caches the site for offline use. When you change any cached
+file, **bump the cache name in `sw.js`** (currently `plumbline-v4` → `plumbline-v5`)
+so returning visitors get the new version.
+
+Project links on the page point at preview deployments (Vercel / Cloudflare /
+Netlify), mostly running mock data — the page says so; keep that honesty when
+editing cards.
+
+## Domain
+
+Served at `plumbline.toolwright.dev` (the `CNAME` file is the single source of
+truth). If the domain strategy changes (e.g. a future `plumbline.studio`),
+update `CNAME`, DNS, and this section together.
 
 ---
 
-Plumbline · Build it true.
+Plumbline Studio · Build it true.
