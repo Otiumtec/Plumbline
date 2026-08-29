@@ -4,6 +4,7 @@
 
 Founder: Kyle Knight, Roanoke, Virginia (works remotely everywhere).
 Contact: kyle@toolwright.dev — a 30-minute scoping call is free.
+LinkedIn: https://www.linkedin.com/in/kyleknightbizdev/
 GitHub: https://github.com/Plumbline-Studio
 Tagline: "Build it true."
 
