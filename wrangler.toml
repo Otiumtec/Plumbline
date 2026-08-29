@@ -1,0 +1,7 @@
+name = "plumbline-storefront"
+compatibility_date = "2026-08-29"
+
+# Static site: serve the storefront directory as the site root.
+# No Worker script needed — assets-only deployment.
+[assets]
+directory = "./storefront"
