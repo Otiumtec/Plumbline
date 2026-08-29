@@ -6,8 +6,8 @@ compatibility_date = "2026-08-29"
 [assets]
 directory = "./storefront"
 
-# Custom domains: attached automatically on deploy. Overrides the
-# placeholder DNS records imported from GoDaddy when the zone moved.
+# Custom domains: attached automatically on deploy. The placeholder DNS
+# records imported from GoDaddy were deleted 2026-08-29 to unblock this.
 routes = [
   { pattern = "plumblinestudio.dev", custom_domain = true },
   { pattern = "www.plumblinestudio.dev", custom_domain = true }
