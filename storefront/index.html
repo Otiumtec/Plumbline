@@ -54,6 +54,13 @@
   a{color:var(--gold-bright);}
   a:focus-visible, .cta:focus-visible{outline:2px solid var(--gold); outline-offset:3px;}
 
+  /* particle field (adapted from Kyle's tool-maker-app particle-life engine) */
+  .heroband{position:relative;}
+  #field{position:absolute; inset:0; width:100%; height:100%; z-index:-1; opacity:.6;
+    -webkit-mask-image:linear-gradient(to bottom, black 55%, transparent 96%);
+    mask-image:linear-gradient(to bottom, black 55%, transparent 96%);}
+  @media (prefers-reduced-motion: reduce){ #field{display:none;} }
+
   /* plumb line motif */
   .plumb{display:flex; flex-direction:column; align-items:center; padding-top:56px;}
   .plumb .line{width:1px; height:72px; background:linear-gradient(to bottom, transparent, var(--gold));}
@@ -105,6 +112,8 @@
 </head>
 <body>
 
+<div class="heroband">
+<canvas id="field" aria-hidden="true"></canvas>
 <div class="plumb" aria-hidden="true"><div class="line"></div><div class="bob"></div></div>
 
 <header class="hero wrap">
@@ -114,6 +123,7 @@
   <a class="cta" href="mailto:kyle@toolwright.dev?subject=The%20Heavy%20Lifting%20—%20scoping%20call&body=What%20I%27m%20drowning%20in%3A%20">Tell me what you're drowning in</a>
   <span class="subcta">A 30-minute scoping call costs nothing. kyle@toolwright.dev</span>
 </header>
+</div>
 
 <section class="wrap" id="offer">
   <h2>One problem. Solved. Running.</h2>
@@ -176,6 +186,99 @@
   <p class="tag">Build it true.</p>
   <p>Plumbline Studio · Roanoke, Virginia · <a href="mailto:kyle@toolwright.dev">kyle@toolwright.dev</a></p>
 </footer>
+
+<script>
+/* Particle field — adapted from Kyle's particle-life engine
+   (tool-maker-app/src/lib/particle-life). Tamed for a storefront:
+   few particles, low alpha, hero-only, 30fps cap, pauses when hidden,
+   absent entirely under prefers-reduced-motion. */
+(function(){
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var canvas = document.getElementById('field');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var COLORS = ['#9ba5b4', '#3d4a60', '#c8a878']; // slate, deep slate, gold (glow, scarce)
+  var DIST = [0.55, 0.37, 0.08];
+  var M = [[0.30,-0.20,0.40],[-0.20,0.25,0.30],[0.10,0.10,-0.30]]; // interaction matrix
+  var R_MAX=70, R_CLOSE=15, FORCE=0.12, FRICTION=0.85, BETA=R_CLOSE/R_MAX, OMB=1-BETA, R2=R_MAX*R_MAX;
+  var W=0, H=0, dpr=1, parts=[];
+
+  function pickType(){ var r=Math.random(), a=0; for(var i=0;i<DIST.length;i++){a+=DIST[i]; if(r<a) return i;} return DIST.length-1; }
+  function size(){
+    var band = canvas.parentElement;
+    dpr = Math.min(window.devicePixelRatio||1, 1.5);
+    W = band.clientWidth; H = band.clientHeight;
+    canvas.width = W*dpr; canvas.height = H*dpr;
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+  }
+  function seed(){
+    var n = Math.min(140, Math.max(50, Math.round(W*H/11000)));
+    parts = [];
+    for(var i=0;i<n;i++) parts.push({x:Math.random()*W, y:Math.random()*H, z:Math.random(),
+      vx:(Math.random()-0.5)*0.2, vy:(Math.random()-0.5)*0.2, t:pickType()});
+  }
+  function forceFn(u,a){ if(u<BETA) return u/BETA-1; if(u<1){var t=(u-BETA)/OMB; return a*(1-Math.abs(2*t-1));} return 0; }
+  function step(){
+    var hw=W*0.5, hh=H*0.5, n=parts.length, i, j;
+    for(i=0;i<n;i++){
+      var p=parts[i], row=M[p.t], fx=0, fy=0;
+      for(j=0;j<n;j++){
+        if(i===j) continue;
+        var q=parts[j], dx=q.x-p.x, dy=q.y-p.y;
+        if(dx>hw)dx-=W; else if(dx<-hw)dx+=W;
+        if(dy>hh)dy-=H; else if(dy<-hh)dy+=H;
+        var r2=dx*dx+dy*dy;
+        if(r2>R2||r2===0) continue;
+        var r=Math.sqrt(r2), f=forceFn(r/R_MAX, row[q.t]), inv=1/r;
+        fx+=dx*inv*f; fy+=dy*inv*f;
+      }
+      p.vx=(p.vx+fx*FORCE)*FRICTION; p.vy=(p.vy+fy*FORCE)*FRICTION;
+    }
+    for(i=0;i<n;i++){
+      var s=parts[i];
+      s.x+=s.vx; s.y+=s.vy;
+      if(s.x<0)s.x+=W; else if(s.x>=W)s.x-=W;
+      if(s.y<0)s.y+=H; else if(s.y>=H)s.y-=H;
+    }
+  }
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    var TP=Math.PI*2, i, p, z, rad;
+    ctx.globalCompositeOperation='source-over';
+    for(i=0;i<parts.length;i++){
+      p=parts[i]; if(p.t===2) continue;
+      z=p.z; rad=1.7*(0.5+1.2*z);
+      ctx.globalAlpha=0.30*(0.3+0.7*z);
+      ctx.fillStyle=COLORS[p.t];
+      ctx.beginPath(); ctx.arc(p.x,p.y,rad,0,TP); ctx.fill();
+    }
+    ctx.globalCompositeOperation='lighter';
+    ctx.fillStyle=COLORS[2];
+    for(i=0;i<parts.length;i++){
+      p=parts[i]; if(p.t!==2) continue;
+      z=p.z;
+      ctx.globalAlpha=0.10*(0.3+0.7*z);
+      ctx.beginPath(); ctx.arc(p.x,p.y,6.5*(0.5+1.2*z),0,TP); ctx.fill();
+      ctx.globalAlpha=0.7*(0.3+0.7*z);
+      ctx.beginPath(); ctx.arc(p.x,p.y,1.8*(0.5+1.2*z),0,TP); ctx.fill();
+    }
+    ctx.globalCompositeOperation='source-over'; ctx.globalAlpha=1;
+  }
+  var last=0, INTERVAL=1000/30, running=true;
+  function loop(ts){
+    if(!running) return;
+    requestAnimationFrame(loop);
+    if(ts-last<INTERVAL) return;
+    last=ts; step(); draw();
+  }
+  document.addEventListener('visibilitychange', function(){
+    running = !document.hidden;
+    if(running) requestAnimationFrame(loop);
+  });
+  var rt; window.addEventListener('resize', function(){ clearTimeout(rt); rt=setTimeout(function(){ size(); seed(); }, 150); });
+  size(); seed(); requestAnimationFrame(loop);
+})();
+</script>
 
 </body>
 </html>
