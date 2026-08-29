@@ -5,3 +5,10 @@ compatibility_date = "2026-08-29"
 # No Worker script needed — assets-only deployment.
 [assets]
 directory = "./storefront"
+
+# Custom domains: attached automatically on deploy. Overrides the
+# placeholder DNS records imported from GoDaddy when the zone moved.
+routes = [
+  { pattern = "plumblinestudio.dev", custom_domain = true },
+  { pattern = "www.plumblinestudio.dev", custom_domain = true }
+]
