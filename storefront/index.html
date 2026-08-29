@@ -56,9 +56,10 @@
 
   /* particle field (adapted from Kyle's tool-maker-app particle-life engine) */
   .heroband{position:relative;}
-  #field{position:absolute; inset:0; width:100%; height:100%; z-index:-1; opacity:.6;
+  #field{position:absolute; inset:0; width:100%; height:100%; z-index:0; opacity:.85;
     -webkit-mask-image:linear-gradient(to bottom, black 55%, transparent 96%);
     mask-image:linear-gradient(to bottom, black 55%, transparent 96%);}
+  .heroband > .plumb, .heroband > .hero{position:relative; z-index:1;}
   @media (prefers-reduced-motion: reduce){ #field{display:none;} }
 
   /* plumb line motif */
@@ -201,7 +202,7 @@
   if (!canvas) return;
   var ctx = canvas.getContext('2d');
   var COLORS = ['#9ba5b4', '#3d4a60', '#c8a878']; // slate, deep slate, gold (glow, scarce)
-  var DIST = [0.55, 0.37, 0.08];
+  var DIST = [0.54, 0.36, 0.10];
   var M = [[0.30,-0.20,0.40],[-0.20,0.25,0.30],[0.10,0.10,-0.30]]; // interaction matrix
   var R_MAX=70, R_CLOSE=15, FORCE=0.12, FRICTION=0.85, BETA=R_CLOSE/R_MAX, OMB=1-BETA, R2=R_MAX*R_MAX;
   var W=0, H=0, dpr=1, parts=[];
@@ -215,7 +216,7 @@
     ctx.setTransform(dpr,0,0,dpr,0,0);
   }
   function seed(){
-    var n = Math.min(140, Math.max(50, Math.round(W*H/11000)));
+    var n = Math.min(220, Math.max(70, Math.round(W*H/7000)));
     parts = [];
     for(var i=0;i<n;i++) parts.push({x:Math.random()*W, y:Math.random()*H, z:Math.random(),
       vx:(Math.random()-0.5)*0.2, vy:(Math.random()-0.5)*0.2, t:pickType()});
@@ -250,8 +251,8 @@
     ctx.globalCompositeOperation='source-over';
     for(i=0;i<parts.length;i++){
       p=parts[i]; if(p.t===2) continue;
-      z=p.z; rad=1.7*(0.5+1.2*z);
-      ctx.globalAlpha=0.30*(0.3+0.7*z);
+      z=p.z; rad=2.4*(0.5+1.2*z);
+      ctx.globalAlpha=0.55*(0.3+0.7*z);
       ctx.fillStyle=COLORS[p.t];
       ctx.beginPath(); ctx.arc(p.x,p.y,rad,0,TP); ctx.fill();
     }
@@ -260,10 +261,10 @@
     for(i=0;i<parts.length;i++){
       p=parts[i]; if(p.t!==2) continue;
       z=p.z;
-      ctx.globalAlpha=0.10*(0.3+0.7*z);
-      ctx.beginPath(); ctx.arc(p.x,p.y,6.5*(0.5+1.2*z),0,TP); ctx.fill();
-      ctx.globalAlpha=0.7*(0.3+0.7*z);
-      ctx.beginPath(); ctx.arc(p.x,p.y,1.8*(0.5+1.2*z),0,TP); ctx.fill();
+      ctx.globalAlpha=0.16*(0.3+0.7*z);
+      ctx.beginPath(); ctx.arc(p.x,p.y,8*(0.5+1.2*z),0,TP); ctx.fill();
+      ctx.globalAlpha=0.85*(0.3+0.7*z);
+      ctx.beginPath(); ctx.arc(p.x,p.y,2.2*(0.5+1.2*z),0,TP); ctx.fill();
     }
     ctx.globalCompositeOperation='source-over'; ctx.globalAlpha=1;
   }
@@ -283,6 +284,8 @@
 })();
 </script>
 
+<script src="portrait-data1.js" defer></script>
+<script src="portrait-data2.js" defer></script>
 <script src="portrait.js" defer></script>
 <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a95101c74d0f4101aeef196ecb64de1e"}'></script><!-- End Cloudflare Web Analytics -->
 
