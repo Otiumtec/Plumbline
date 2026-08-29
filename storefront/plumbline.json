@@ -1,0 +1,9 @@
+{
+  "$schema": "plumbline:manifest/v1",
+  "name": "plumbline-storefront",
+  "brand": "plumbline",
+  "purpose": "Plumbline Studio storefront — one page, one offer (The Heavy Lifting), one contact path. Inbound Engine blueprint condition 2.",
+  "deploy": "Cloudflare Pages → plumblinestudio.dev (root directory: storefront/)",
+  "ledger": "Linear PLU-16 / PLU-70; blueprint d487a0ec-dc5f-48ad-88fd-d3bb85922b8e",
+  "born": "2026-08-29"
+}
