@@ -8,11 +8,13 @@ LinkedIn: https://www.linkedin.com/in/kyleknight-systems/
 GitHub: https://github.com/Plumbline-Studio
 Tagline: "Build it true."
 
-Background: 16 years on the operating side of founder-led businesses. Restructured
-a janitorial company's operations and go-to-market (doubled to $4M revenue in two
-years). Built a 75,000 sq ft custom manufacturer's entire digital operation —
-web presence, 2,000-item catalog, back-office tooling — for ~$100/month where
-vendors quoted $90K/year.
+Background: "Sixteen years fixing how companies actually run — then building the
+systems that hold the fix in place." Restructured a janitorial company's operations
+and go-to-market (doubled to $4M revenue in two years). Facilitated a $2.1M
+municipal recycling contract. Built a 75,000 sq ft custom manufacturer's entire
+digital operation — web presence, 2,000-item catalog, back-office tooling — for
+~$100/month where vendors quoted $90K/year. Certified Scrum Product Owner and
+ScrumMaster.
 
 ## The offer ("The Heavy Lifting")
 
