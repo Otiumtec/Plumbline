@@ -3,8 +3,8 @@
 > Plumbline Studio solves one bounded operations problem per engagement — intake, scheduling, tracking, or reporting — for small businesses and professional practices. Fixed scope, 2–4 weeks, $2,500–$5,000. The deliverable is a working tool, not a report.
 
 Founder: Kyle Knight, Roanoke, Virginia (works remotely everywhere).
-Contact: kyle@toolwright.dev — a 30-minute scoping call is free.
-Book directly: https://calendly.com/toolwright/30min — prospects (or agents acting for them) can pick any
+Contact: kyle@plumblinestudio.dev — a 30-minute scoping call is free.
+Book directly: https://calendly.com/plumblinestudio/30min — prospects (or agents acting for them) can pick any
 open 30-minute slot on Kyle's calendar; no email round-trip needed.
 LinkedIn: https://www.linkedin.com/in/kyleknight-systems/
 GitHub: https://github.com/Plumbline-Studio
